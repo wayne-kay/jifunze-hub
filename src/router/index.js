@@ -8,6 +8,7 @@ import Profile from '../component/Profile.vue'
 import WishList from '../component/WishList.vue'
 import ViewBook from '../component/ViewBook.vue'
 import Admin from '../component/Admin.vue'
+import SignUp from '../component/SignUp.vue'
 
 
 const router = createRouter({
@@ -45,7 +46,10 @@ const router = createRouter({
       path: '/view_book',
       component: ViewBook
     },
- 
+    {
+      path: '/signup',
+      component: SignUp
+    }
   ],
 })
 
