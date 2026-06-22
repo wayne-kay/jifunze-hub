@@ -1,161 +1,148 @@
 <script setup>
 import { ref } from 'vue'
 
-const form = ref({
-  firstName: '',
-  lastName: '',
-  email: '',
-  phone: '',
-  location: '',
-  address: '',
-  password: '',
-  confirmPassword: ''
-})
+const showPassword = ref(false)
+const password = ref(null) 
+
+const confirmPassword= ref(null)
+const showConfirm = ref(false)
+const rules = {
+    required: value => !!value || 'Required.', // if statement is true, return true, else return 'Required.'
+    min: v => v.length >= 8 || 'Min 8 characters', // if statement is true, return true, else return 'Min 8 characters'
+    passwordMatch: () => password == confirmPassword || 'Passwords must match'  // if statement is true, return true, else return 'Passwords must match' and also a function that checks if the password and confirm password match
+  }
+// Data Model for the form, we will use v-model to bind the data to the form fields. We will also use rules to validate the form fields. We will use showPassword and showConfirm to toggle the visibility of the password fields.
+
+const firstName = ref(null)
+const lastName = ref(null)
+const email = ref(null)
+const phoneNumber = ref(null)
+const location = ref(null)
+const address = ref(null)
+
+
+function registerUser() 
+    // Here we will send the data to the backend to register the user. We will use axios to send the data to the backend. We will also handle the response from the backend and show a success message or an error message based on the response.
+{
+    const userData = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        email: email.value,
+        phoneNumber: phoneNumber.value,
+        location: location.value,
+        address: address.value,
+        password: password.value
+    }
+
+    try{
+        localStorage.setItem("userData", JSON.stringify(userData)) 
+    } catch (error) {
+        console.error("Error saving user data:", error)
+    }
+
+
+
+}
+
+
+
 </script>
 
 <template>
-  <v-container class="py-12">
-    <v-row justify="center">
-      <v-col cols="12" sm="10" md="6" lg="5">
-        <!-- Header Section -->
-        <div class="mb-8">
-          <h1 class="text-h4 font-weight-bold mb-3">Create Your Account</h1>
-          <p class="text-subtitle1 text-grey-darken-1">Join us today and start exploring</p>
-        </div>
+    <v-container align="center" class="mt-16">
+        <v-row>
+            <v-col>
+                <v-card max-width="80%" class="mt-16">
+                    <v-form class="mt-12">
+                          <v-row>
+                            <v-col md ="3">
+                                <div> First Name </div>
+                            </v-col>
+                            <v-col md ="3">
+                                <v-text-field v-model="firstName"></v-text-field>
+                            </v-col>
+                            <v-col md ="3">
+                                <div> Last Name </div>
+                            </v-col>
+                            <v-col md ="3">
+                                <v-text-field v-model="lastName"></v-text-field>
+                            </v-col>
+                        </v-row>
 
-        <!-- Sign Up Card -->
-        <v-card class="rounded-lg" elevation="4" style="border-top: 4px solid #1976d2">
-          <v-card-text class="pa-8">
-            <v-form>
-              <!-- Name Row -->
-              <v-row>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.firstName"
-                    label="First Name"
-                    variant="outlined"
-                    density="comfortable"
-                    class="mb-2"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.lastName"
-                    label="Last Name"
-                    variant="outlined"
-                    density="comfortable"
-                    class="mb-2"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
+                        <v-row>
+                            <v-col md ="3">
+                                <div> Email </div>
+                            </v-col>
+                            <v-col md ="3">
+                                <v-text-field v-model="email"></v-text-field>
+                            </v-col>
+                            <v-col md ="3">
+                                <div> Phone Number </div>
+                            </v-col>
+                            <v-col md ="3">
+                                <v-text-field v-model="phoneNumber" type="number"></v-text-field>
+                            </v-col>
+                        </v-row>
 
-              <!-- Email & Phone -->
-              <v-row>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.email"
-                    label="Email Address"
-                    type="email"
-                    variant="outlined"
-                    density="comfortable"
-                    class="mb-2"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.phone"
-                    label="Phone Number"
-                    variant="outlined"
-                    density="comfortable"
-                    class="mb-2"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
+                        <v-row>
+                            <v-col md ="3">
+                                <div> Location </div>
+                            </v-col>
+                            <v-col md ="3">
+                                <v-select v-model="location" :items="['Mombasa', 'Nairobi', 'Kisumu', 'Eldoret', 'Thika', 'Naivasha', 'Machakos']"></v-select>
+                            </v-col>
+                            <v-col md ="3">
+                                <div> Address </div>
+                            </v-col>
+                            <v-col md ="3">
+                                <v-text-field></v-text-field>
+                            </v-col>
+                        </v-row>
 
-              <!-- Location & Address -->
-              <v-row>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.location"
-                    label="City/Location"
-                    variant="outlined"
-                    density="comfortable"
-                    class="mb-2"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.address"
-                    label="Address"
-                    variant="outlined"
-                    density="comfortable"
-                    class="mb-2"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
+                        <v-row>
+                            <v-col md ="3">
+                                <div> Password </div>
+                            </v-col>
+                            <v-col md ="3">
+                               	<v-text-field 
+                                v-model="password"
+                                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                :rules="[rules.required, rules.min]"
+                                :type="showPassword ? 'text' : 'password'"
+                                variant="outlined"
+                                @click:append="showPassword = !showPassword"
+                            ></v-text-field>
+                            </v-col>
+                            <v-col md ="3">
+                                <div> Confirm Password </div>
+                            </v-col>
+                            <v-col md ="3">
+                               	<v-text-field 
+                                v-model="confirmPassword"
+                                :append-icon="showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+                                :rules="[rules.required, rules.passwordMatch]"
+                                :type="showConfirm ? 'text' : 'password'"
+                                variant="outlined"
+                                @click:append="showConfirm = !showConfirm"
+                            ></v-text-field>
+                            </v-col>
+                        </v-row>
 
-              <!-- Password Fields -->
-              <v-row>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.password"
-                    label="Password"
-                    type="password"
-                    variant="outlined"
-                    density="comfortable"
-                    class="mb-2"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-text-field
-                    v-model="form.confirmPassword"
-                    label="Confirm Password"
-                    type="password"
-                    variant="outlined"
-                    density="comfortable"
-                    class="mb-2"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
 
-              <!-- CTA Buttons -->
-              <v-row class="mt-4">
-                <v-col cols="12">
-                  <v-btn
-                    size="large"
-                    class="w-100 mb-3"
-                    color="primary"
-                    style="font-weight: 600; text-transform: none; font-size: 16px"
-                  >
-                    Create Account
-                  </v-btn>
-                </v-col>
-              </v-row>
-
-              <!-- Sign In Link -->
-              <v-row>
-                <v-col cols="12" class="text-center">
-                  <span class="text-body2 text-grey-darken-1">
-                    Already have an account?
-                    <router-link
-                      to="/login"
-                      class="font-weight-bold text-primary"
-                      style="text-decoration: none"
-                    >
-                      Sign In
-                    </router-link>
-                  </span>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-card-text>
-        </v-card>
-
-        <!-- Footer Text -->
-        <p class="text-caption text-center text-grey mt-6">
-          By signing up, you agree to our Terms of Service and Privacy Policy
-        </p>
-      </v-col>
-    </v-row>
-  </v-container>
-</template>
+                    <v-row>
+                            <v-col md ="6">
+                                <v-btn color="primary" variant="elevated" @click="registerUser()">Sign Up</v-btn>
+                            </v-col>
+                            <v-col md ="6">
+                                <div>
+                                    Already have an acount?
+                                </div>
+                            </v-col>
+                        </v-row>
+                    </v-form>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
+  
+  </template>
