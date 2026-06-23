@@ -9,6 +9,7 @@ import WishList from '../component/WishList.vue'
 import ViewBook from '../component/ViewBook.vue'
 import Admin from '../component/Admin.vue'
 import SignUp from '../component/SignUp.vue'
+import login from '../component/login.vue'
 
 
 const router = createRouter({
@@ -50,6 +51,12 @@ const router = createRouter({
       path: '/signup',
       component: SignUp
     }
+    ,
+    {
+      path: '/login',
+      component: login
+    }
+
   ],
 })
 
