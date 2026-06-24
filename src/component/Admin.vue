@@ -11,6 +11,22 @@ const users = usersStore.users
 const ordersStore = useOrdersStore()
 const orders = ordersStore.orders
 
+
+const allOrders = Object.values(orders).map(order => {
+    const book = Object.values(books).find(book => book.id === order.bookId)
+    const user = Object.values(users).find(user => user.id === order.customerId)
+    
+    return {
+        ...order,
+
+        // ?: tenary operator to check if user and book exist before accessing their properties
+        customer: user ? user.firstname + ' ' + user.lastname : 'Unknown',
+        book: book ? book.title : 'Unknown',
+        price: book ? book.price : 0,
+    }
+}
+  )
+
 const tab = ref(null)
 
 </script>
@@ -58,7 +74,7 @@ const tab = ref(null)
                                 </thead>
                                 <tbody>
                                     <tr v-for="item in books" :key="item.id" >
-                                        <td>{{ item.title }}</td>
+                                        <td>{{ item.name }}</td>
                                         <td>{{ item.price }}</td>
                                         <td>{{ item.author }}</td>
                                         <td>{{ item.genre }}</td>
@@ -109,8 +125,8 @@ const tab = ref(null)
                                 </thead>
                                 <tbody>
                                     <tr v-for="item in users" :key="item.id" >
-                                        <td>{{ item.firstName }}</td>
-                                        <td>{{ item.lastName }}</td>
+                                        <td>{{ item.firstname }}</td>
+                                        <td>{{ item.lastname }}</td>
                                         <td>{{ item.email }}</td>
                                         <td>{{ item.phone }}</td>
                                         <td>{{ item.location }}</td>
@@ -162,7 +178,7 @@ const tab = ref(null)
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="item in orders" :key="item.id" >
+                                    <tr v-for="item in allOrders" :key="item.id" >
                                         <td>{{ item.customer }}</td>
                                         <td>{{ item.book }}</td>
                                         <td>${{ item.price }}</td>
